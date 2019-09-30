@@ -148,3 +148,5 @@ p1 = predict(net,FF_Train,'MiniBatchSize',MiniBatchSize);
 MODEL=fitcsvm([p1 y2],class_train','Solver','L1QP');
 p2 = predict(net,FF_Test,'MiniBatchSize',1);
 predicted_class = predict(MODEL,[p2 y2_Test']);
+
+test_accuracy = mean(class_test == predicted_class)*100
