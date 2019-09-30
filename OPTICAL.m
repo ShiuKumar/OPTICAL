@@ -60,7 +60,7 @@ for i = 1:length(class_test)
 end
 
 [Z, Wcsp] = CSP(Train_data1,Target_Train1',3);
-[Z1, Wcsp1] = CSP(Train_data,Target_Train',3);
+[Z1, Wcsp1] = CSP(train_data,class_train',3);
 
 clear F
 clear F1
@@ -86,8 +86,8 @@ for i = 1:1:size(Target_Test1,2)
     F_Test(i,:) = log(var1);   
 end
 
-for i = 1:1:length(Target_Test)
-    Z1_Test(:,:,i) = Wcsp1*real(Test_data(:,:,i)); % Z - csp transformed data
+for i = 1:1:length(class_test)
+    Z1_Test(:,:,i) = Wcsp1*real(test_data(:,:,i)); % Z - csp transformed data
     var1 = var(Z1_Test(:,:,i)');
     F1_Test(i,:) = log(var1./sum(var1));
 end
@@ -99,11 +99,11 @@ F1(isnan(F1)) = 1E-3;
 y2_Test = Wlda2'*F1_Test';
 
 for i = 1:length(class_train)
-    FF_Train{i,1} = F((i-1)*Nwpt+1:i*Nwpt,:)';
+    FF_Train{i,1} = F((i-1)*number_of_windows+1:i*number_of_windows,:)';
 end
 
 for i = 1:length(class_test)
-    FF_Test{i,1} = F_Test((i-1)*Nwpt+1:i*Nwpt,:)';
+    FF_Test{i,1} = F_Test((i-1)*number_of_windows+1:i*number_of_windows,:)';
 end
 
 fun = @(x)valErrorFun(x, FF_Train, class_train);
@@ -142,9 +142,9 @@ options = trainingOptions('sgdm', ...
 'GradientThreshold',1, ...
 'Verbose',0);
 
-net = trainNetwork(FF_Train,Target_Train',layers,options);
+net = trainNetwork(FF_Train,class_train',layers,options);
 
 p1 = predict(net,FF_Train,'MiniBatchSize',MiniBatchSize);
-MODEL=fitcsvm([p1 y2],Target_Train','Solver','L1QP');
+MODEL=fitcsvm([p1 y2],class_train','Solver','L1QP');
 p2 = predict(net,FF_Test,'MiniBatchSize',1);
 predicted_class = predict(MODEL,[p2 y2_Test']);
