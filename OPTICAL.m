@@ -153,5 +153,6 @@ predicted_class = predict(MODEL,[p2 y2_Test']);
 
 train_accuracy = mean(class_train == predicted_class_train')*100;
 test_accuracy = mean(class_test == predicted_class')*100;
-fprintf('Accuracy on train data is %5.2f%\n',train_accuracy)
-fprintf('\nAccuracy on test data is %5.2f% \n',test_accuracy)
+fprintf('Accuracy on train data is %5.2f %',train_accuracy)
+fprintf('\nAccuracy on test data is %5.2f %',test_accuracy)
+fprintf('\n')
