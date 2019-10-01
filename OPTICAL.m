@@ -144,9 +144,14 @@ options = trainingOptions('sgdm', ...
 
 net = trainNetwork(FF_Train,class_train',layers,options);
 
-p1 = predict(net,FF_Train,'MiniBatchSize',MiniBatchSize);
+p1 = predict(net,FF_Train,'MiniBatchSize',1);
 MODEL=fitcsvm([p1 y2],class_train','Solver','L1QP');
+predicted_class_train = predict(MODEL,[p1 y2]);
+
 p2 = predict(net,FF_Test,'MiniBatchSize',1);
 predicted_class = predict(MODEL,[p2 y2_Test']);
 
-test_accuracy = mean(class_test == predicted_class)*100
+train_accuracy = mean(class_train == predicted_class_train')*100;
+test_accuracy = mean(class_test == predicted_class')*100;
+fprintf('Accuracy on train data is %5.2f%\n',train_accuracy)
+fprintf('\nAccuracy on test data is %5.2f% \n',test_accuracy)
