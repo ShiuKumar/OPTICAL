@@ -36,10 +36,8 @@ function [valError,cons,fileName] = valErrorFun(x, data, Target)
         p22 = predict(net,FF_Test,'MiniBatchSize',1);
         p2 = double(p22);
         
-        model = svmtrain(Target_Train',p1,['-t 2 -c 0.25 -q']);  
-        pred = svmpredict(Target_Test',p2,model);
-        disp(size(pred))
-        disp(size(Target_Test))
+        model = fitcsvm(p1,Target_Train','Solver','L1QP');
+        pred = predict(model,p2);
         Error(num) = 1 - mean(pred == Target_Test');
     end
     
